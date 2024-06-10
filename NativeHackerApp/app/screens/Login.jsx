@@ -11,6 +11,7 @@ import {
   StyleSheet,
 } from "react-native";
 import COLORS from "../constants/colors";
+import { useTheme } from "./ThemeProvider";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -77,6 +78,8 @@ function Login() {
   const navigation = useNavigation();
   const [isAdmin, setIsAdmin] = React.useState(false);
   const [rememberMe, setRememberMe] = React.useState(false);
+  const { isDarkMode } = useTheme();
+  const styles = getStyles(isDarkMode);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -155,7 +158,7 @@ function Login() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (isDarkMode) => StyleSheet.create({
   logoContainer: {
     flex: 0.4,
     justifyContent: "flex-end",
@@ -196,9 +199,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     borderRadius: 8,
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.grey,
-    color: COLORS.grey,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
+    borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
+    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderWidth: 1,
   },
   rememberMeContainer: {
@@ -213,29 +216,29 @@ const styles = StyleSheet.create({
   rememberMeCheckbox: {
     width: 24,
     height: 24,
-    backgroundColor: COLORS.grey,
+    backgroundColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 8,
   },
   rememberMeChecked: {
-    backgroundColor: COLORS.blue,
+    backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue,
   },
   rememberMeTick: {
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     fontWeight: "bold",
   },
   signInButton: {
     justifyContent: "center",
     alignItems: "center",
     marginTop: 16,
-    backgroundColor: COLORS.blue,
+    backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue,
     borderRadius: 8,
     height: windowHeight * 0.06,
   },
   signInButtonText: {
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     fontSize: windowWidth * 0.045,
   },
   googleSignInContainer: {
@@ -243,7 +246,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: "4%",
-    backgroundColor: COLORS.black,
+    backgroundColor: isDarkMode ? COLORS.dark.black : COLORS.light.black,
     borderRadius: 8,
     marginTop: 12,
   },
@@ -253,7 +256,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   googleSignInText: {
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     marginLeft: 8,
     fontSize: windowWidth * 0.045,
   },
@@ -280,7 +283,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   toggleButtonText: {
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     fontSize: windowWidth * 0.045,
   },
 });

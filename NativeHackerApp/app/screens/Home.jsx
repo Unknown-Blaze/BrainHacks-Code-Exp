@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import COLORS from "../constants/colors";
 import Header from "../general components/header";
 import { PROMOS, ITEMS } from "./Lists";
+import { useTheme } from "./ThemeProvider";
 
 const getFontFamily = () => {
   if (Platform.OS === "ios") {
@@ -39,7 +40,7 @@ const MoneySaved = ({ amount }) => (
   </View>
 );
 
-export const Item = ({ name, daysLeft, used }) => (
+const Item = ({ name, daysLeft, used }) => (
   <View>
     <View style={{ flexDirection: "row", justifyContent: "center" }}>
       <View style={{ flex: 0.6 }}>
@@ -55,7 +56,7 @@ export const Item = ({ name, daysLeft, used }) => (
   </View>
 );
 
-export const Promo = ({ name, location, itemsOnSale, image }) => (
+const Promo = ({ name, location, itemsOnSale, image }) => (
   <TouchableOpacity
     style={styles.promotionBox}
     onPress={() => handlePromotionPress(name)}
@@ -76,6 +77,8 @@ export const Promo = ({ name, location, itemsOnSale, image }) => (
 
 function Home() {
   const navigation = useNavigation();
+  const { isDarkMode } = useTheme();
+  const styles = getStyles(isDarkMode);
 
   const handleTrackerPress = () => {
     console.log("Navigating to GroceryTracker");
@@ -147,11 +150,11 @@ function Home() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (isDarkMode) => StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     alignSelf: "center",
   },
   welcomeContainer: {
@@ -162,7 +165,7 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: COLORS.dark_green,
+    color: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     textAlign: "center",
   },
   savingsContainer: {
@@ -174,26 +177,26 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 12,
-    backgroundColor: COLORS.green,
+    backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
     marginHorizontal: 4,
     borderRadius: 10,
   },
   savingsText: {
     fontSize: 32,
     fontWeight: "600",
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     textAlign: "center",
   },
   savingsLabel: {
     marginTop: 8,
     fontSize: 16,
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     textAlign: "center",
   },
   expiringText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: COLORS.dark_green,
+    color: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     textAlign: "left",
     marginTop: 20,
   },
@@ -207,14 +210,14 @@ const styles = StyleSheet.create({
   trackerText: {
     marginTop: 12,
     fontSize: 16,
-    color: COLORS.dark_green,
+    color: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     textAlign: "center",
     textDecorationLine: "underline",
   },
   promotionsText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: COLORS.dark_green,
+    color: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     textAlign: "left",
     marginTop: 20,
   },
@@ -224,7 +227,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 8,
     borderWidth: 1,
-    borderColor: COLORS.grey,
+    borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderRadius: 8,
   },
   promotionImage: {

@@ -4,8 +4,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import COLORS from "../constants/colors";
 import Button from "../general components/Button";
 import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "./ThemeProvider";
 
 const Landing = () => {
+  const { isDarkMode } = useTheme();
+  const styles = getStyles(isDarkMode);
   const navigation = useNavigation();
   return (
     <LinearGradient
@@ -98,7 +101,7 @@ const Landing = () => {
             style={{
               fontSize: 50,
               fontWeight: 800,
-              color: COLORS.white,
+              color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
             }}
           >
             Let's Get
@@ -107,7 +110,7 @@ const Landing = () => {
             style={{
               fontSize: 46,
               fontWeight: 800,
-              color: COLORS.white,
+              color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
             }}
           >
             Started
@@ -116,12 +119,12 @@ const Landing = () => {
           <View style={{ marginVertical: 22 }}>
             {/* <Text style={{
                             fontSize: 16,
-                            color: COLORS.white,
+                            color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
                             marginVertical: 4
                         }}>Connect with each other with chatting</Text>
                         <Text style={{
                             fontSize: 16,
-                            color: COLORS.white,
+                            color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
                         }}>Calling, Enjoy Safe and private texting</Text> */}
           </View>
 
@@ -144,7 +147,7 @@ const Landing = () => {
             <Text
               style={{
                 fontSize: 16,
-                color: COLORS.white,
+                color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
               }}
             >
               Already have an account ?
@@ -153,7 +156,7 @@ const Landing = () => {
               <Text
                 style={{
                   fontSize: 16,
-                  color: COLORS.white,
+                  color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
                   fontWeight: "bold",
                   marginLeft: 4,
                 }}
@@ -165,7 +168,7 @@ const Landing = () => {
               <Text
                 style={{
                   fontSize: 16,
-                  color: COLORS.white,
+                  color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
                   fontWeight: "bold",
                   marginLeft: 4,
                 }}
@@ -178,7 +181,7 @@ const Landing = () => {
               <Text
                 style={{
                   fontSize: 16,
-                  color: COLORS.white,
+                  color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
                   fontWeight: "bold",
                   marginLeft: 4,
                 }}
@@ -190,7 +193,7 @@ const Landing = () => {
               <Text
                 style={{
                   fontSize: 16,
-                  color: COLORS.white,
+                  color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
                   fontWeight: "bold",
                   marginLeft: 4,
                 }}
@@ -202,7 +205,7 @@ const Landing = () => {
               <Text
                 style={{
                   fontSize: 16,
-                  color: COLORS.white,
+                  color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
                   fontWeight: "bold",
                   marginLeft: 4,
                 }}

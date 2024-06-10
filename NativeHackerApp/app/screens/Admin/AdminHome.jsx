@@ -19,6 +19,7 @@ import Header from "../../general components/header";
 import AdminNavBar from "../../general components/AdminNavBar";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { generateEmojiForItem } from "../../api/emoji";
+import { useTheme } from "../ThemeProvider";
 
 const UNSPLASH_API_KEY = "MlvldI8iKakP08t0D7S3pRJ0bjaJkzmAwYdrRAR71RM";
 const UNSPLASH_API_URL = "https://api.unsplash.com/photos/random";
@@ -188,6 +189,8 @@ const ItemComponent = ({
 );
 
 const AdminHome = () => {
+  const { isDarkMode } = useTheme();
+  const styles = getStyles(isDarkMode);
   const [items, setItems] = useState([
     {
       id: "Gardenia Bread",
@@ -539,11 +542,11 @@ const AdminHome = () => {
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
+const getStyles = (isDarkMode) => StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   controlsContainer: {
     flexDirection: "row",
@@ -558,18 +561,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   activeControlButton: {
-    backgroundColor: "#007bff",
+    backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue,
   },
   controlButtonText: {
     marginLeft: 5,
-    color: "black",
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   listContainer: {
     paddingBottom: 20,
   },
   itemContainer: {
     padding: 15,
-    backgroundColor: "#ffffff",
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderRadius: 10,
     marginBottom: 10,
     shadowColor: "#000",
@@ -580,7 +583,7 @@ const styles = StyleSheet.create({
   },
   expandedContainer: {
     marginTop: 10,
-    backgroundColor: "white",
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   itemDetails: {
     flexDirection: "row",
@@ -599,7 +602,7 @@ const styles = StyleSheet.create({
   },
   itemDetailText: {
     fontSize: 14,
-    color: "black",
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   quantityControls: {
     flexDirection: "row",
@@ -637,14 +640,14 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: 300,
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderRadius: 10,
     alignItems: "center",
   },
   editModalContainer: {
     width: 300,
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderRadius: 10,
     alignItems: "center",
   },
@@ -654,18 +657,18 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     padding: 10,
-    backgroundColor: "#007bff",
+    backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue,
     borderRadius: 5,
     marginTop: 10,
   },
   modalButtonCancel: {
     padding: 10,
-    backgroundColor: "red",
+    backgroundColor: isDarkMode ? COLORS.dark.red : COLORS.light.red,
     borderRadius: 5,
     marginTop: 10,
   },
   modalButtonText: {
-    color: "white",
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   itemDetailsContainer: {
     flexDirection: "row", // Arrange itemDetails and quantityControls in a row
@@ -682,7 +685,7 @@ const styles = StyleSheet.create({
     left: 10,
     zIndex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    color: "white",
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     padding: 5,
     borderRadius: 5,
     fontSize: 18,
@@ -691,7 +694,7 @@ const styles = StyleSheet.create({
   editableButton: {
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: "white",
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderRadius: 20,
     marginVertical: 2,
   },
@@ -701,7 +704,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: "white",
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderRadius: 25,
     marginTop: 8,
     shadowColor: "#000",
@@ -732,7 +735,7 @@ const styles = StyleSheet.create({
   newModalContainer: {
     width: 350,
     padding: 30,
-    backgroundColor: "#fff",
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderRadius: 20,
     alignItems: "center",
     shadowColor: "#000",
@@ -756,7 +759,7 @@ const styles = StyleSheet.create({
   },
   newModalButton: {
     padding: 15,
-    backgroundColor: "#28a745",
+    backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
     borderRadius: 10,
     marginTop: 20,
     width: "100%",
@@ -764,14 +767,14 @@ const styles = StyleSheet.create({
   },
   newModalButtonCancel: {
     padding: 15,
-    backgroundColor: "red",
+    backgroundColor: isDarkMode ? COLORS.dark.red : COLORS.light.red,
     borderRadius: 10,
     marginTop: 10,
     width: "100%",
     alignItems: "center",
   },
   newModalButtonText: {
-    color: "white",
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     fontSize: 16,
     fontWeight: "bold",
   },

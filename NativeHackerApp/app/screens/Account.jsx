@@ -1,64 +1,56 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  Alert,
-  Button
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Alert, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../general components/header";
 import COLORS from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "./ThemeProvider"; // Adjust the path as necessary
 
 const { width } = Dimensions.get("window");
 
-const ProfileCard = ({ imageUrl, name, daysSaved }) => (
-  <View style={styles.profileContainer}>
-    <Text style={styles.profileName}>{name}</Text>
-    <View style={styles.daysSavedContainer}>
-      <Image source={{ uri: imageUrl }} style={styles.profileImage} />
-      <Text style={styles.daysSavedText}>{daysSaved}</Text>
+const ProfileCard = ({ imageUrl, name, daysSaved, isDarkMode }) => (
+  <View style={getStyles(isDarkMode).profileContainer}>
+    <Text style={getStyles(isDarkMode).profileName}>{name}</Text>
+    <View style={getStyles(isDarkMode).daysSavedContainer}>
+      <Image source={{ uri: imageUrl }} style={getStyles(isDarkMode).profileImage} />
+      <Text style={getStyles(isDarkMode).daysSavedText}>{daysSaved}</Text>
     </View>
-    <Text style={styles.subtitle}>Days of Earth You Have Saved</Text>
+    <Text style={getStyles(isDarkMode).subtitle}>Days of Earth You Have Saved</Text>
   </View>
 );
 
-const SettingItem = ({ iconUrl, label, onPress }) => (
-  <TouchableOpacity onPress={onPress} style={styles.settingItem}>
-    <Image source={{ uri: iconUrl }} style={styles.settingIcon} />
-    <Text style={styles.settingItemText}>{label}</Text>
+const SettingItem = ({ iconUrl, label, onPress, isDarkMode }) => (
+  <TouchableOpacity onPress={onPress} style={getStyles(isDarkMode).settingItem}>
+    <Image source={{ uri: iconUrl }} style={getStyles(isDarkMode).settingIcon} />
+    <Text style={getStyles(isDarkMode).settingItemText}>{label}</Text>
   </TouchableOpacity>
 );
 
-const CustomSwitch = ({ value, onValueChange }) => (
+const CustomSwitch = ({ value, onValueChange, isDarkMode }) => (
   <TouchableOpacity
-    style={[styles.switch, value ? styles.switchOn : styles.switchOff]}
+    style={[getStyles(isDarkMode).switch, value ? getStyles(isDarkMode).switchOn : getStyles(isDarkMode).switchOff]}
     onPress={onValueChange}
   >
-    <View style={[styles.slider, value ? styles.sliderOn : styles.sliderOff]} />
+    <View style={[getStyles(isDarkMode).slider, value ? getStyles(isDarkMode).sliderOn : getStyles(isDarkMode).sliderOff]} />
   </TouchableOpacity>
 );
 
-const ToggleItem = ({ label, value, onToggle }) => (
-  <View style={styles.toggleItemContainer}>
-    <Text style={styles.settingItemText}>{label}</Text>
-    <CustomSwitch value={value} onValueChange={onToggle} />
+const ToggleItem = ({ label, value, onToggle, isDarkMode }) => (
+  <View style={getStyles(isDarkMode).toggleItemContainer}>
+    <Text style={getStyles(isDarkMode).settingItemText}>{label}</Text>
+    <CustomSwitch value={value} onValueChange={onToggle} isDarkMode={isDarkMode} />
   </View>
 );
 
 function Account() {
-  const [isDarkMode, setIsDarkMode] = React.useState(false);
+  const { isDarkMode, toggleTheme } = useTheme();
   const [isPushNotifications, setIsPushNotifications] = React.useState(false);
   const navigation = useNavigation();
+  
   const handleEditProfile = () => Alert.alert("Edit profile clicked");
   const handleChangePassword = () => Alert.alert("Change password clicked");
   const handleDarkModeToggle = () => {
-    setIsDarkMode(!isDarkMode);
+    toggleTheme();
     Alert.alert("Dark mode toggled");
   };
   const handlePushNotificationsToggle = () => {
@@ -67,44 +59,48 @@ function Account() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={getStyles(isDarkMode).container}>
       <Header />
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <ScrollView contentContainerStyle={getStyles(isDarkMode).scrollViewContainer}>
         <ProfileCard
           imageUrl="https://cdn.builder.io/api/v1/image/assets/TEMP/7611a6a8b21db1ffd7d72b26deed298c206723f270e908d33d06ecc90f247e9a?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
           name="Kaliraj Santosh"
           daysSaved="330"
+          isDarkMode={isDarkMode}
         />
-        <Text style={styles.settingsTitle}>Settings</Text>
-        <View style={styles.settingsContainer}>
+        <Text style={getStyles(isDarkMode).settingsTitle}>Settings</Text>
+        <View style={getStyles(isDarkMode).settingsContainer}>
           <SettingItem
             iconUrl="https://cdn.builder.io/api/v1/image/assets/TEMP/31032d447a397d461dca8487d83d26125a5d62d04c8d5fe97a2b1b8ab22e231c?apiKey=273a3e4505cd4e05ba15f44788b2ff1a&"
             label="Kaliraj Santoshraj"
             onPress={() => Alert.alert("Account Settings clicked")}
+            isDarkMode={isDarkMode}
           />
-          <Text style={styles.sectionText}>Account Settings</Text>
-          <Button title = "Sign Out" onPress={() => navigation.navigate('Login')}/>
+          <Text style={getStyles(isDarkMode).sectionText}>Account Settings</Text>
+          <Button title="Sign Out" onPress={() => navigation.navigate('Login')} />
           <TouchableOpacity
             onPress={handleEditProfile}
-            style={styles.flexColItem}
+            style={getStyles(isDarkMode).flexColItem}
           >
-            <Text style={styles.settingItemText}>Edit profile</Text>
+            <Text style={getStyles(isDarkMode).settingItemText}>Edit profile</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleChangePassword}
-            style={styles.flexColItem}
+            style={getStyles(isDarkMode).flexColItem}
           >
-            <Text style={styles.settingItemText}>Change password</Text>
+            <Text style={getStyles(isDarkMode).settingItemText}>Change password</Text>
           </TouchableOpacity>
           <ToggleItem
             label="Dark mode"
             onToggle={handleDarkModeToggle}
             value={isDarkMode}
+            isDarkMode={isDarkMode}
           />
           <ToggleItem
             label="Push notifications"
             onToggle={handlePushNotificationsToggle}
             value={isPushNotifications}
+            isDarkMode={isDarkMode}
           />
         </View>
       </ScrollView>
@@ -112,10 +108,10 @@ function Account() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (isDarkMode) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.black : COLORS.light.white,
   },
   scrollViewContainer: {
     alignItems: "center",
@@ -125,7 +121,7 @@ const styles = StyleSheet.create({
     padding: "5%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: COLORS.dark_green,
+    backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.dark_green,
   },
   profileContainer: {
     width: "90%",
@@ -135,7 +131,7 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 24,
     fontWeight: "bold",
-    color: COLORS.dark_green,
+    color: isDarkMode ? COLORS.dark.green : COLORS.light.dark_green,
     marginVertical: 8,
     textAlign: "center",
   },
@@ -155,19 +151,19 @@ const styles = StyleSheet.create({
   daysSavedText: {
     fontSize: 40,
     fontWeight: "bold",
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   subtitle: {
     marginTop: 8,
     fontSize: 20,
     fontWeight: "bold",
-    color: COLORS.black,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.black,
     textAlign: "center",
   },
   settingsTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: COLORS.dark_green,
+    color: isDarkMode ? COLORS.dark.green : COLORS.light.dark_green,
     marginTop: 20,
     marginBottom: 12,
     width: "90%",
@@ -176,12 +172,12 @@ const styles = StyleSheet.create({
   settingsContainer: {
     width: "90%",
     alignItems: "center",
-    shadowColor: COLORS.black,
+    shadowColor: isDarkMode ? COLORS.dark.white : COLORS.light.black,
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2.5,
     elevation: 5,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.black : COLORS.light.white,
     padding: 10,
     borderRadius: 10,
     marginBottom: 20, // add margin to prevent overlap
@@ -198,14 +194,14 @@ const styles = StyleSheet.create({
   },
   settingItemText: {
     fontSize: 20,
-    color: COLORS.black,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.black,
     marginLeft: 10,
     flex: 1,
   },
   sectionText: {
     marginTop: 20,
     fontSize: 18,
-    color: COLORS.grey,
+    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     width: "100%",
     marginLeft: 10,
   },
@@ -230,15 +226,15 @@ const styles = StyleSheet.create({
     position: "relative",
     width: 60,
     height: 32,
-    backgroundColor: COLORS.grey,
+    backgroundColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderRadius: 34 / 2,
     padding: 2,
   },
   switchOn: {
-    backgroundColor: COLORS.blue,
+    backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue,
   },
   switchOff: {
-    backgroundColor: COLORS.grey,
+    backgroundColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
   },
   slider: {
     position: "absolute",
@@ -246,7 +242,7 @@ const styles = StyleSheet.create({
     left: 1,
     width: 30,
     height: 30,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderRadius: 15,
     transition: ".4s",
   },

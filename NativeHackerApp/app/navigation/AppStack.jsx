@@ -1,10 +1,9 @@
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeStack from "../screens/HomeStack";
 import Login from "../screens/Login";
 import Signup from "../screens/Signup";
 import CameraScreen from "../screens/CameraScreen";
-import Home from "../screens/Admin/AdminHome";
-import Profile from "../screens/Admin/AdminProfile";
 import { AdminStack } from "./AdminStack";
 
 const Stack = createStackNavigator();

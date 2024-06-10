@@ -10,11 +10,14 @@ import {
 } from "react-native";
 import axios from "axios";
 import COLORS from "../constants/colors";
+import { useTheme } from "../screens/ThemeProvider";
 
 const CountryCodePicker = ({ selectedCountryCode, setSelectedCountryCode }) => {
   const [countryCodes, setCountryCodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const { isDarkMode } = useTheme();
+  const styles = getStyles(isDarkMode);
 
   useEffect(() => {
     const fetchCountryCodes = async () => {
@@ -96,15 +99,15 @@ const styles = StyleSheet.create({
   },
   selectedCodeContainer: {
     borderWidth: 1,
-    borderColor: COLORS.gray,
+    borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderRadius: 4,
     padding: 10,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     height: 40,
   },
   selectedCodeText: {
     fontSize: 16,
-    color: COLORS.black,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black
   },
   modalOverlay: {
     flex: 1,
@@ -114,7 +117,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: "80%",
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
@@ -122,16 +125,16 @@ const styles = StyleSheet.create({
   pickerItem: {
     padding: 15,
     fontSize: 16,
-    color: COLORS.black,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   closeButton: {
     marginTop: 20,
     padding: 10,
     borderRadius: 5,
-    backgroundColor: COLORS.primary,
+    backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue
   },
   closeButtonText: {
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     fontSize: 16,
   },
 });

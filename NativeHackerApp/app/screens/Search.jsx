@@ -18,6 +18,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useState } from "react";
 import { Promo } from "./Home";
 import { PROMOS, MARKETITEMS, RECIPES } from "./Lists";
+import { useTheme } from "./ThemeProvider";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -112,6 +113,10 @@ export const Recipe = ({ rating, location, name, numIng, time, image }) => (
 );
 
 const Search = () => {
+
+  const { isDarkMode } = useTheme();
+  const styles = getStyles(isDarkMode);
+
   const [selectedButton, setSelectedButton] = useState(null);
   const [searchText, setSearchText] = useState('');
 
@@ -207,10 +212,10 @@ const Search = () => {
   )
 };
 
-const styles = StyleSheet.create({
+const getStyles = (isDarkMode) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     width: "100%",
     alignSelf: "center",
   },
@@ -226,30 +231,30 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingLeft: width * 0.05,
     fontSize: width * 0.04,
-    color: COLORS.white,
-    backgroundColor: COLORS.green,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
+    backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
   },
   filterButton: {
     width: width * 0.28,
     height: height * 0.06,
-    backgroundColor: "white",
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     marginHorizontal: width * 0.02,
     borderRadius: 1000,
     justifyContent: "center",
     alignItems: "center",
   },
   selectedButton: {
-    backgroundColor: COLORS.green,
+    backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
   },
   buttonText: {
-    color: COLORS.black,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
     fontSize: width * 0.04,
   },
   selectedButtonText: {
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   resultsText: {
-    color: COLORS.dark_green,
+    color: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     fontWeight: "200",
     fontSize: width * 0.06,
   },
@@ -258,7 +263,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: width * 0.04,
     borderBottomWidth: 1,
-    borderColor: COLORS.grey,
+    borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
   },
   groceryItemImage: {
     width: width * 0.2,
@@ -281,7 +286,7 @@ const styles = StyleSheet.create({
   promotionsText: {
     fontSize: width * 0.045,
     fontWeight: "bold",
-    color: COLORS.dark_green,
+    color: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     textAlign: "left",
     marginTop: height * 0.02,
   },
@@ -291,7 +296,7 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.02,
     padding: width * 0.02,
     borderWidth: 1,
-    borderColor: COLORS.grey,
+    borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderRadius: 8,
   },
   promotionImage: {
@@ -318,7 +323,7 @@ const styles = StyleSheet.create({
   expiringText: {
     fontSize: width * 0.045,
     fontWeight: "bold",
-    color: COLORS.dark_green,
+    color: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     textAlign: "left",
     marginTop: height * 0.02,
   },
@@ -332,7 +337,7 @@ const styles = StyleSheet.create({
   trackerText: {
     marginTop: height * 0.015,
     fontSize: width * 0.04,
-    color: COLORS.dark_green,
+    color: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     textAlign: "center",
     textDecorationLine: "underline",
   },
@@ -376,7 +381,7 @@ const styles = StyleSheet.create({
     marginBottom: height * 0.02,
     padding: width * 0.02,
     borderWidth: 1,
-    borderColor: COLORS.grey,
+    borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderRadius: 8,
   },
   recipeContainer: {
@@ -430,7 +435,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "stretch",
     gap: 4,
-    color: "#FFF",
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     fontWeight: "700",
   },
   locationIcon: {
@@ -457,7 +462,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 1)",
     borderStyle: "solid",
     borderWidth: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     width: 1,
     flexShrink: 0,
     height: 18,

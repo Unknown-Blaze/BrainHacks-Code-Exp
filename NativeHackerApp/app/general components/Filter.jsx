@@ -3,8 +3,11 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
 import COLORS from "../constants/colors";
+import { useTheme } from "../screens/ThemeProvider";
 
 const Filter = ({ isDropdownOpen, setIsDropdownOpen }) => {
+  const { isDarkMode } = useTheme();
+  const styles = getStyles(isDarkMode);
   return (
     <TouchableOpacity
       style={styles.filterButton}
@@ -20,14 +23,14 @@ const Filter = ({ isDropdownOpen, setIsDropdownOpen }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (isDarkMode) => StyleSheet.create({
   filterButton: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: "2%",
     marginVertical: "1.5%",
-    backgroundColor: COLORS.green,
+    backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
     alignSelf: "center",
     borderRadius: 50,
     width: 100, 
@@ -35,7 +38,7 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 16,
-    color: "white",
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     textAlign: "center",
   },
 });

@@ -3,8 +3,11 @@ import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import COLORS from "../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "../screens/ThemeProvider";
 
 const AdminNavBar = () => {
+  const { isDarkMode } = useTheme();
+  const styles = getStyles(isDarkMode);
   const navigation = useNavigation();
   return (
     <View style={styles.bottomNav}>
@@ -26,20 +29,20 @@ const AdminNavBar = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (isDarkMode) => StyleSheet.create({
   bottomNav: {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
     paddingVertical: 10,
-    backgroundColor: COLORS.green,
+    backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
   },
   navButton: {
     justifyContent: "center",
     alignItems: "center",
   },
   navButtonText: {
-    color: "white",
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     marginTop: 4,
   },
 });

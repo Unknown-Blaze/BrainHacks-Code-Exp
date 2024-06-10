@@ -18,12 +18,13 @@ import AdminNavBar from "../../general components/AdminNavBar";
 import COLORS from "../../constants/colors";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "../ThemeProvider";
 
 const ProfileItem = ({ icon, label, value, onEdit }) => (
   <View style={styles.profileItemContainer}>
     <View style={styles.profileItemDetails}>
       <View style={styles.profileIconContainer}>
-        <FontAwesome name={icon} size={24} color={COLORS.black} />
+        <FontAwesome name={icon} size={24} color={isDarkMode ? COLORS.dark.black : COLORS.light.black} />
       </View>
       <View style={styles.profileItemTextContainer}>
         <Text style={styles.profileItemValue}>{value}</Text>
@@ -31,12 +32,14 @@ const ProfileItem = ({ icon, label, value, onEdit }) => (
       </View>
     </View>
     <TouchableOpacity onPress={onEdit} style={styles.editButton}>
-      <FontAwesome name="chevron-right" size={16} color={COLORS.grey} />
+      <FontAwesome name="chevron-right" size={16} color={isDarkMode ? COLORS.dark.grey : COLORS.light.grey} />
     </TouchableOpacity>
   </View>
 );
 
 const AdminProfile = () => {
+  const { isDarkMode } = useTheme();
+  const styles = getStyles(isDarkMode);
   const [user, setUser] = useState({
     name: "Woodlands Fairprice",
     logo: "👤",
@@ -291,18 +294,18 @@ const AdminProfile = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (isDarkMode) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   profileHeader: {
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.grey,
+    borderBottomColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
   },
   profileHeaderContent: {
     flexDirection: "row",
@@ -324,12 +327,12 @@ const styles = StyleSheet.create({
   },
   profileAccountNumber: {
     fontSize: 16,
-    color: COLORS.grey,
+    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     marginRight: 8,
   },
   copyButton: {
     padding: 8,
-    backgroundColor: "#e9ecef",
+    backgroundColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderRadius: 4,
   },
   profileItemsContainer: {
@@ -341,10 +344,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 16,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderRadius: 16,
     marginBottom: 12,
-    shadowColor: COLORS.black,
+    shadowColor: isDarkMode ? COLORS.dark.black : COLORS.light.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -358,10 +361,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 8,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderRadius: 16,
     marginRight: 12,
-    borderColor: COLORS.grey,
+    borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderWidth: 1,
   },
   profileItemTextContainer: {
@@ -369,12 +372,12 @@ const styles = StyleSheet.create({
   },
   profileItemLabel: {
     fontSize: 14,
-    color: COLORS.grey,
+    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
   },
   profileItemValue: {
     fontWeight: "bold",
     fontSize: 16,
-    color: COLORS.black,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   editButton: {
     padding: 12,
@@ -388,14 +391,14 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: "80%",
     padding: 20,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     borderRadius: 16,
     alignItems: "center",
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: COLORS.black,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
     marginBottom: 20,
   },
   phoneNumberContainer: {
@@ -404,32 +407,32 @@ const styles = StyleSheet.create({
   },
   phonePrefix: {
     fontSize: 16,
-    color: COLORS.black,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
     marginRight: 8,
   },
   phoneInput: {
     flex: 1,
     padding: 8,
     borderWidth: 1,
-    borderColor: COLORS.grey,
+    borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderRadius: 8,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   input: {
     width: "100%",
     padding: 8,
     marginVertical: 8,
     borderWidth: 1,
-    borderColor: COLORS.grey,
+    borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderRadius: 8,
-    backgroundColor: COLORS.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   pickerContainer: {
     width: "100%",
     marginVertical: 8,
   },
   dropDownContainer: {
-    borderColor: COLORS.grey,
+    borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderWidth: 1,
   },
   saveButton: {
@@ -437,13 +440,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 24,
     paddingVertical: 8,
-    backgroundColor: COLORS.dark_green,
+    backgroundColor: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     borderRadius: 100,
     marginTop: 8,
     width: "100%",
   },
   saveButtonText: {
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     fontWeight: "bold",
   },
   cancelButton: {
@@ -451,14 +454,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 24,
     paddingVertical: 8,
-    backgroundColor: COLORS.red,
+    backgroundColor: isDarkMode ? COLORS.dark.red : COLORS.light.red,
     borderRadius: 100,
     marginTop: 8,
     marginBottom: 20,
     width: "100%",
   },
   cancelButtonText: {
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     fontWeight: "bold",
   },
   signOutButton: {
@@ -466,13 +469,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 24,
     paddingVertical: 12,
-    backgroundColor: COLORS.blue,
+    backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue,
     borderRadius: 100,
     marginVertical: 20,
     alignSelf: "center",
   },
   signOutButtonText: {
-    color: COLORS.white,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     fontWeight: "bold",
   },
 });

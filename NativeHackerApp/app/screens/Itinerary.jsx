@@ -20,6 +20,7 @@ import Filter from "../general components/Filter";
 import { useNavigation } from "@react-navigation/native";
 import COLORS from "../constants/colors";
 import { generateEmojiForItem } from "../api/emoji";
+import { useTheme } from "./ThemeProvider";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -107,6 +108,8 @@ function Itinerary() {
   const [itemDaysLeftError, setItemDaysLeftError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState([...items]);
+  const { isDarkMode } = useTheme();
+  const styles = getStyles(isDarkMode);
 
   useEffect(() => {
     setFilteredItems(getFilteredItems());
@@ -249,10 +252,10 @@ function Itinerary() {
     return filteredItems;
   };
 
-  const styles = StyleSheet.create({
+  const getStyles = (isDarkMode) => StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: "white",
+      backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
       width: "100%",
       alignSelf: "center",
       paddingBottom: 100,
@@ -266,14 +269,14 @@ function Itinerary() {
       marginTop: "5%",
       marginVertical: "1.5%",
       width: "100%",
-      backgroundColor: COLORS.green,
+      backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
       alignSelf: "center",
       maxWidth: "80%",
       borderRadius: width/2
     },
     searchText: {
       fontSize: 18,
-      color: "white",
+      color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     },
     listContainer: {
       flex: 0.8,
@@ -283,7 +286,7 @@ function Itinerary() {
     itemsHeaderText: {
       fontSize: 20,
       fontWeight: "bold",
-      color: COLORS.green,
+      color: isDarkMode ? COLORS.dark.green : COLORS.light.green,
       marginVertical: "5%",
       textAlign: "center",
     },
@@ -329,7 +332,7 @@ function Itinerary() {
       justifyContent: "center",
       paddingHorizontal: "8%",
       paddingVertical: "3%",
-      backgroundColor: COLORS.green,
+      backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
       borderRadius: 50, // Set to a fixed number for circular shape
       bottom: "3%",
       width: 100, // Explicitly set width and height to make it circular
@@ -337,13 +340,13 @@ function Itinerary() {
     },
     editButtonText: {
       fontSize: 20,
-      color: "white",
+      color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
       textAlign: "center",
     },
     addButton: {
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: COLORS.green,
+      backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
       borderRadius: 100,
       height: 0.07 * height,
       width: 0.07 * height,
@@ -354,7 +357,7 @@ function Itinerary() {
     },
     addButtonText: {
       fontSize: 30,
-      color: "white",
+      color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
       textAlign: "center",
     },
     //--------Edit------------
@@ -367,24 +370,24 @@ function Itinerary() {
     },
     saveButton: {
       paddingVertical: "5%",
-      backgroundColor: "blue",
+      backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue,
       marginHorizontal: "7%",
       left: "40%",
       bottom: "15%",
     },
     cancelButton: {
       paddingHorizontal: "6%",
-      backgroundColor: "red",
+      backgroundColor: isDarkMode ? COLORS.dark.red : COLORS.light.red,
       marginHorizontal: "15%",
       bottom: "-17%",
     },
 
     deleteIcon: {
-      color: "red",
+      color: isDarkMode ? COLORS.dark.red : COLORS.light.red,
       marginHorizontal: 3,
     },
     dullText: {
-      color: "gray",
+      color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     },
     quantityButtons: {
       flexDirection: "row",
@@ -399,13 +402,13 @@ function Itinerary() {
       margin: 7,
     },
     quantityButtonIncrease: {
-      backgroundColor: "green",
+      backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
     },
     quantityButtonDecrease: {
-      backgroundColor: "red",
+      backgroundColor: isDarkMode ? COLORS.dark.red : COLORS.light.red,
     },
     addOptionButton: {
-      backgroundColor: "blue",
+      backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue,
       justifyContent: "center",
       alignItems: "center",
       width: 0.06 * height,
@@ -421,7 +424,7 @@ function Itinerary() {
       width: 0.06 * height,
       height: 0.06 * height,
       borderRadius: 100,
-      backgroundColor: "red",
+      backgroundColor: isDarkMode ? COLORS.dark.red : COLORS.light.red,
       right: 0.01 * width,
       bottom: 0.025 * height,
     },
@@ -433,7 +436,7 @@ function Itinerary() {
     },
 
     searchBar: {
-      backgroundColor: COLORS.green,
+      backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
       padding: "4%",
       borderRadius: 20,
       margin: "5%",
@@ -447,7 +450,7 @@ function Itinerary() {
     },
     modalContent: {
       width: "80%",
-      backgroundColor: "white",
+      backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
       padding: 20,
       borderRadius: 10,
     },
@@ -458,18 +461,18 @@ function Itinerary() {
     },
     modalInput: {
       borderWidth: 1,
-      borderColor: "gray",
+      borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
       padding: 10,
       marginVertical: 5,
       borderRadius: 5,
     },
     errorText: {
-      color: "red",
+      color: isDarkMode ? COLORS.dark.red : COLORS.light.red,
       marginTop: 5,
     },
 
     requiredField: {
-      borderColor: "red",
+      borderColor: isDarkMode ? COLORS.dark.red : COLORS.light.red,
       borderWidth: 1,
     },
     modalButtonContainer: {
@@ -478,16 +481,16 @@ function Itinerary() {
       marginTop: 10,
     },
     modalButton: {
-      backgroundColor: COLORS.green,
+      backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
       padding: 10,
       borderRadius: 5,
     },
     modalButtonText: {
-      color: "white",
+      color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
       fontWeight: "bold",
     },
     card: {
-      backgroundColor: "#f8f9fa",
+      backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
       borderRadius: 15,
       padding: 15,
       marginVertical: 10,
@@ -520,7 +523,7 @@ function Itinerary() {
 
     expiryText: {
       fontSize: 16,
-      color: "#6c757d",
+      color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     },
     editOptions: {
       flexDirection: "column",
@@ -542,20 +545,20 @@ function Itinerary() {
     quantityButtonText: {
       fontSize: 24,
       fontWeight: "bold",
-      color: "white",
+      color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     },
     quantityButtonIncrease: {
-      backgroundColor: "#28a745",
+      backgroundColor: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     },
     quantityButtonDecrease: {
-      backgroundColor: "#dc3545",
+      backgroundColor: isDarkMode ? COLORS.dark.red : COLORS.light.red,
     },
     quantity: {
       fontSize: 18,
       marginHorizontal: 10,
     },
     deleteIcon: {
-      color: "red",
+      color: isDarkMode ? COLORS.dark.red : COLORS.light.red,
       marginHorizontal: 3,
     },
     marginHorizontal: {
@@ -563,7 +566,7 @@ function Itinerary() {
     },
     quantityText: {
       fontSize: 16,
-      color: "#6c757d",
+      color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
       marginBottom: 5,
     },
     editOptions: {
@@ -571,7 +574,7 @@ function Itinerary() {
       alignItems: "center", // ensures vertical alignment
     },
     deleteIcon: {
-      color: "red",
+      color: isDarkMode ? COLORS.dark.red : COLORS.light.red,
       marginHorizontal: 3,
     },
     marginHorizontal: {
@@ -579,7 +582,7 @@ function Itinerary() {
     },
     quantityText: {
       fontSize: 16,
-      color: "#6c757d",
+      color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
       marginBottom: 5,
     },
     editOptions: {
@@ -603,7 +606,7 @@ function Itinerary() {
       padding: 5,
     },
     dullText: {
-      color: "gray",
+      color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     },
     quantityTextBetween: {
       marginHorizontal: 10,

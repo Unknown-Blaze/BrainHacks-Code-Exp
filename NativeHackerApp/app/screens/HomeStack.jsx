@@ -9,6 +9,7 @@ import Maps from './Maps';
 import Account from './Account';
 import Home from './Home';
 import COLORS from "../constants/colors"
+import { useTheme } from "./ThemeProvider";
 
 const Tab = createBottomTabNavigator();
 const height = Dimensions.get("window").height;
@@ -23,11 +24,13 @@ const screenOptions = {
     left: 0,
     elevation: 0,
     height: 0.1 * height,
-    backgroundColor: "#619f75"
+    backgroundColor: COLORS.dark.green
   },
 }
 
 export default function HomeStack() {
+  const { isDarkMode} = useTheme();
+  const styles = getStyles(isDarkMode);
   return (
     <Tab.Navigator screenOptions = {screenOptions} initialRouteName={"Home"}>
       <Tab.Screen 

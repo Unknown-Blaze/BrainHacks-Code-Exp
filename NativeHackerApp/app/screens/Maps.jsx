@@ -4,6 +4,7 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useNavigation } from "@react-navigation/native";
 import Entypo from '@expo/vector-icons/Entypo';
+import { useTheme } from "./ThemeProvider";
 
 const GOOGLE_PLACES_API_KEY = 'AIzaSyBbcOqj7cnjA-3E_VRsCFyzKjUygMGAQnU';
 const width = Dimensions.get("window").width;
@@ -63,6 +64,8 @@ const MapScreen = () => {
  const [region, setRegion] = useState(null);
  const mapRef = useRef(null);
  const navigation = useNavigation();
+ const { isDarkMode } = useTheme();
+  const styles = getStyles(isDarkMode);
 
 
  useEffect(() => {
@@ -195,7 +198,7 @@ const MapScreen = () => {
  );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (isDarkMode) => StyleSheet.create({
  navigationButtonsContainer: {
    position: 'absolute',
    bottom: 0.125 * height,
@@ -210,18 +213,18 @@ const styles = StyleSheet.create({
    justifyContent: 'center',
  },
  horizontalNavigationButton: {
-   backgroundColor: '#619f75',
+   backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
    padding: 10,
    marginHorizontal: 0.05 * width,
    borderRadius: 100,
  },
  navigationButton: {
-   backgroundColor: '#619f75',
+   backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
    padding: 10,
    borderRadius: 100,
  },
  navigationButtonText: {
-   color: 'white',
+   color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
    fontSize: 16,
    fontWeight: 'bold',
  },
