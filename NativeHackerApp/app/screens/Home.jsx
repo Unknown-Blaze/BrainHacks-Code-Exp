@@ -9,8 +9,6 @@ import {
   Platform,
   StyleSheet,
 } from "react-native";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
-import CheckBox from "@react-native-community/checkbox";
 import { useNavigation } from "@react-navigation/native";
 import COLORS from "../constants/colors";
 import Header from "../general components/header";
@@ -26,21 +24,21 @@ const getFontFamily = () => {
   return "System";
 };
 
-const FoodSaved = ({ amount }) => (
+const FoodSaved = ({ amount, styles }) => (
   <View style={styles.savingsBox}>
     <Text style={styles.savingsText}>{amount} kg</Text>
     <Text style={styles.savingsLabel}>of food saved</Text>
   </View>
 );
 
-const MoneySaved = ({ amount }) => (
+const MoneySaved = ({ amount, styles }) => (
   <View style={styles.savingsBox}>
     <Text style={styles.savingsText}>$ {amount}</Text>
     <Text style={styles.savingsLabel}>of money saved</Text>
   </View>
 );
 
-const Item = ({ name, daysLeft, used }) => (
+const Item = ({ name, daysLeft, used, styles }) => (
   <View>
     <View style={{ flexDirection: "row", justifyContent: "center" }}>
       <View style={{ flex: 0.6 }}>
@@ -56,7 +54,7 @@ const Item = ({ name, daysLeft, used }) => (
   </View>
 );
 
-const Promo = ({ name, location, itemsOnSale, image }) => (
+const Promo = ({ name, location, itemsOnSale, image, styles }) => (
   <TouchableOpacity
     style={styles.promotionBox}
     onPress={() => handlePromotionPress(name)}
@@ -95,8 +93,8 @@ function Home() {
       <View style={styles.welcomeContainer}>
         <Text style={styles.welcomeText}>Welcome Santosh,</Text>
         <View style={styles.savingsContainer}>
-          <FoodSaved amount="3.3" />
-          <MoneySaved amount="30" />
+          <FoodSaved amount="3.3" styles={styles} />
+          <MoneySaved amount="30" styles={styles} />
         </View>
         <Text style={styles.expiringText}>Food Expiring Soon:</Text>
         <View>
@@ -120,6 +118,7 @@ function Home() {
                 name={item.name}
                 daysLeft={item.daysLeft}
                 used={item.used}
+                styles={styles} // Pass the styles prop to Item component
               />
             )}
             keyExtractor={(item) => item.id}
@@ -139,6 +138,7 @@ function Home() {
                 location={item.location}
                 itemsOnSale={item.itemsOnSale}
                 image={item.image}
+                styles={styles} // Pass the styles prop to Promo component
               />
             )}
             keyExtractor={(item) => item.id}
@@ -203,9 +203,11 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   expiryFont: {
     fontSize: 16,
     fontWeight: "bold",
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   itemsFont: {
     fontSize: 16,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   trackerText: {
     marginTop: 12,
@@ -242,14 +244,15 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   promotionTitle: {
     fontSize: 16,
     fontWeight: "bold",
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   promotionSubtitle: {
     fontSize: 14,
-    color: "#555",
+    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
   },
   promotionItems: {
     fontSize: 12,
-    color: "#999",
+    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
   },
 });
 

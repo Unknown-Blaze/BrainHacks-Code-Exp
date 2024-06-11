@@ -16,7 +16,7 @@ import { useTheme } from "./ThemeProvider";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const InputField = ({ label, placeholder, secureTextEntry }) => (
+const InputField = ({ label, placeholder, secureTextEntry, styles }) => (
   <View style={styles.inputFieldContainer}>
     <Text style={styles.srOnly}>{label}</Text>
     <TextInput
@@ -28,25 +28,25 @@ const InputField = ({ label, placeholder, secureTextEntry }) => (
   </View>
 );
 
-const RememberMe = ({ isChecked, onToggle }) => (
+const RememberMe = ({ isChecked, onToggle, styles }) => (
   <View style={styles.rememberMeContainer}>
     <TouchableOpacity style={styles.rememberMeOption} onPress={onToggle}>
       <View style={[styles.rememberMeCheckbox, isChecked && styles.rememberMeChecked]}>
         {isChecked && <Text style={styles.rememberMeTick}>✓</Text>}
       </View>
-      <Text>Remember me</Text>
+      <Text style={styles.rememberMeText}>Remember me</Text>
     </TouchableOpacity>
-    <Button title="Forgot password?"></Button>
+    <Button title="Forgot password?" />
   </View>
 );
 
-const SignInButton = ({ text, onPress }) => (
+const SignInButton = ({ text, onPress, styles }) => (
   <TouchableOpacity style={styles.signInButton} onPress={onPress}>
     <Text style={styles.signInButtonText}>{text}</Text>
   </TouchableOpacity>
 );
 
-const GoogleSignIn = ({ navigation }) => (
+const GoogleSignIn = ({ navigation, styles }) => (
   <TouchableOpacity style={styles.googleSignInContainer}>
     <Image
       source={require("../../assets/google.png")}
@@ -62,7 +62,7 @@ const GoogleSignIn = ({ navigation }) => (
   </TouchableOpacity>
 );
 
-const SignUpPrompt = ({ navigation }) => (
+const SignUpPrompt = ({ navigation, styles }) => (
   <View style={styles.signUpPromptContainer}>
     <Text style={styles.signUpPromptText}>Don't have an account?</Text>
     <Text
@@ -108,13 +108,19 @@ function Login() {
                   label="Email or phone number"
                   placeholder="Email or phone number"
                   secureTextEntry={false}
+                  styles={styles}
                 />
                 <InputField
                   label="Enter password"
                   placeholder="Enter password"
                   secureTextEntry={true}
+                  styles={styles}
                 />
-                <RememberMe isChecked={rememberMe} onToggle={() => setRememberMe(!rememberMe)} />
+                <RememberMe
+                  isChecked={rememberMe}
+                  onToggle={() => setRememberMe(!rememberMe)}
+                  styles={styles}
+                />
                 <View style={styles.toggleContainer}>
                   <TouchableOpacity
                     style={[
@@ -144,11 +150,12 @@ function Login() {
                       navigation.replace("HomeStack");
                     }
                   }}
+                  styles={styles}
                 />
               </View>
               <View style={{ flex: 0.3, width: "80%" }}>
-                <GoogleSignIn navigation={navigation} />
-                <SignUpPrompt navigation={navigation} />
+                <GoogleSignIn navigation={navigation} styles={styles} />
+                <SignUpPrompt navigation={navigation} styles={styles} />
               </View>
             </SafeAreaView>
           </ImageBackground>
@@ -181,7 +188,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     width: "100%",
     paddingBottom: "5%",
     paddingHorizontal: "5%",
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: isDarkMode ? COLORS.dark.bg : "rgba(255, 255, 255, 0.8)",
     borderRadius: 8,
   },
   inputFieldContainer: {
@@ -199,9 +206,9 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     borderRadius: 8,
-    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
-    borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
-    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
+    backgroundColor: isDarkMode ? COLORS.dark.inputBg : COLORS.light.inputBg,
+    borderColor: isDarkMode ? COLORS.dark.inputBorder : COLORS.light.inputBorder,
+    color: isDarkMode ? COLORS.dark.text : COLORS.light.text,
     borderWidth: 1,
   },
   rememberMeContainer: {
@@ -216,29 +223,32 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   rememberMeCheckbox: {
     width: 24,
     height: 24,
-    backgroundColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
+    backgroundColor: isDarkMode ? COLORS.dark.checkboxBg : COLORS.light.checkboxBg,
     borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 8,
   },
   rememberMeChecked: {
-    backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue,
+    backgroundColor: isDarkMode ? COLORS.dark.checkboxChecked : COLORS.light.checkboxChecked,
   },
   rememberMeTick: {
-    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
+    color: isDarkMode ? COLORS.dark.tick : COLORS.light.tick,
     fontWeight: "bold",
+  },
+  rememberMeText: {
+    color: isDarkMode ? COLORS.dark.text : COLORS.light.text,
   },
   signInButton: {
     justifyContent: "center",
     alignItems: "center",
     marginTop: 16,
-    backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue,
+    backgroundColor: isDarkMode ? COLORS.dark.buttonBg : COLORS.light.buttonBg,
     borderRadius: 8,
     height: windowHeight * 0.06,
   },
   signInButtonText: {
-    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
+    color: isDarkMode ? COLORS.dark.buttonText : COLORS.light.buttonText,
     fontSize: windowWidth * 0.045,
   },
   googleSignInContainer: {
@@ -246,7 +256,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: "4%",
-    backgroundColor: isDarkMode ? COLORS.dark.black : COLORS.light.black,
+    backgroundColor: isDarkMode ? COLORS.dark.googleButtonBg : COLORS.light.googleButtonBg,
     borderRadius: 8,
     marginTop: 12,
   },
@@ -256,7 +266,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     height: "100%",
   },
   googleSignInText: {
-    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
+    color: isDarkMode ? COLORS.dark.text : COLORS.light.text,
     marginLeft: 8,
     fontSize: windowWidth * 0.045,
   },
@@ -266,10 +276,10 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     justifyContent: "center",
   },
   signUpPromptText: {
-    color: "#4b5563",
+    color: isDarkMode ? COLORS.dark.text : COLORS.light.text,
   },
   signUpPromptLink: {
-    color: "#000",
+    color: isDarkMode ? COLORS.dark.link : COLORS.light.link,
     marginLeft: 4,
   },
   toggleContainer: {
@@ -283,7 +293,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     marginHorizontal: 5,
   },
   toggleButtonText: {
-    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
+    color: isDarkMode ? COLORS.dark.text : COLORS.light.text,
     fontSize: windowWidth * 0.045,
   },
 });

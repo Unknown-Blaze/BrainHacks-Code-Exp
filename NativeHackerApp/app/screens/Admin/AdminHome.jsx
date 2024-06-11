@@ -37,6 +37,7 @@ const ItemComponent = ({
   setEditableField,
   onSaveEdit,
   imageUrl,
+  styles
 }) => (
   <View
     style={[styles.itemContainer, isExpanded ? styles.expandedContainer : null]}
@@ -465,6 +466,7 @@ const AdminHome = () => {
             editableField={editableField}
             setEditableField={setEditableField}
             onSaveEdit={handleSaveEdit}
+            styles={styles}
           />
         )}
         contentContainerStyle={styles.listContainer}
@@ -573,6 +575,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   itemContainer: {
     padding: 15,
     backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
     borderRadius: 10,
     marginBottom: 10,
     shadowColor: "#000",
@@ -584,6 +587,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   expandedContainer: {
     marginTop: 10,
     backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   itemDetails: {
     flexDirection: "row",
@@ -599,6 +603,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   itemNameText: {
     fontWeight: "bold",
     fontSize: 16,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   itemDetailText: {
     fontSize: 14,
@@ -616,6 +621,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   quantityText: {
     marginHorizontal: 10,
     fontSize: 16,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   deleteIcon: {
     marginLeft: 10,
@@ -668,16 +674,18 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     marginTop: 10,
   },
   modalButtonText: {
-    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   itemDetailsContainer: {
     flexDirection: "row", // Arrange itemDetails and quantityControls in a row
     justifyContent: "space-between", // Space them out
     alignItems: "center", // Align them center vertically
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   expandedDetails: {
     marginTop: 10,
     position: "relative", // Ensure positioning for itemNameOnImage
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   itemNameOnImage: {
     position: "absolute",
@@ -690,6 +698,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     borderRadius: 5,
     fontSize: 18,
     fontWeight: "bold",
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   editableButton: {
     paddingVertical: 10,
@@ -724,10 +733,11 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     fontWeight: "bold",
     flex: 1,
     textAlign: "left",
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   sliderValue: {
     fontSize: 16,
-    color: "#666",
+    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     flex: 1,
     textAlign: "right",
   },
@@ -756,6 +766,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     width: "100%",
     padding: 10,
     fontSize: 16,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   newModalButton: {
     padding: 15,

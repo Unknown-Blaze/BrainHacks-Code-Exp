@@ -1,3 +1,4 @@
+// COLORS.js
 const COLORS = {
     light: {
         white: "#FFFFFF",
@@ -7,16 +8,39 @@ const COLORS = {
         grey: "#a1a1aa",
         blue: "blue",
         red: "red",
+        checkboxBg: "#e0e0e0",
+        checkboxChecked: "blue",
+        tick: "#FFFFFF",
+        text: "#222222",
+        buttonBg: "blue",
+        buttonText: "#FFFFFF",
+        googleButtonBg: "#4285F4",
+        link: "blue",
     },
     dark: {
-        white: "#222222",
+        white: "#333333",
         black: "#FFFFFF",
-        green: "#2E7D32",
-        dark_green: "green",
+        green: "green",
+        dark_green: "#619f75",
         grey: "#757575",
         blue: "#2196F3",
         red: "#D32F2F",
+        checkboxBg: "#424242",
+        checkboxChecked: "#2196F3",
+        tick: "#FFFFFF",
+        text: "#FFFFFF",
+        buttonBg: "#2196F3",
+        buttonText: "#FFFFFF",
+        googleButtonBg: "#1A73E8",
+        link: "#2196F3",
     },
+    white: "#FFFFFF",
+    black: "#222222",
+    green: "#619f75",
+    dark_green: "green",
+    grey: "#a1a1aa",
+    blue: "blue",
+    red: "red",
 };
 
 export default COLORS;

@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import { useNavigation } from "@react-navigation/native";
 import Entypo from '@expo/vector-icons/Entypo';
 import { useTheme } from "./ThemeProvider";
+import COLORS from "../constants/colors"
 
 const GOOGLE_PLACES_API_KEY = 'AIzaSyBbcOqj7cnjA-3E_VRsCFyzKjUygMGAQnU';
 const width = Dimensions.get("window").width;
@@ -147,7 +148,7 @@ const MapScreen = () => {
 
 
  return (
-   <View style={{ flex: 1 }}>
+   <View style={{ flex: 1, backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,}}>
      {region ? (
        <MapView
          style={{ flex: 1 }}

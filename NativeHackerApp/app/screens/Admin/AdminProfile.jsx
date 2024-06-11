@@ -20,22 +20,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "../ThemeProvider";
 
-const ProfileItem = ({ icon, label, value, onEdit }) => (
-  <View style={styles.profileItemContainer}>
-    <View style={styles.profileItemDetails}>
-      <View style={styles.profileIconContainer}>
-        <FontAwesome name={icon} size={24} color={isDarkMode ? COLORS.dark.black : COLORS.light.black} />
-      </View>
-      <View style={styles.profileItemTextContainer}>
-        <Text style={styles.profileItemValue}>{value}</Text>
-        <Text style={styles.profileItemLabel}>{label}</Text>
-      </View>
-    </View>
-    <TouchableOpacity onPress={onEdit} style={styles.editButton}>
-      <FontAwesome name="chevron-right" size={16} color={isDarkMode ? COLORS.dark.grey : COLORS.light.grey} />
-    </TouchableOpacity>
-  </View>
-);
+
 
 const AdminProfile = () => {
   const { isDarkMode } = useTheme();
@@ -51,6 +36,23 @@ const AdminProfile = () => {
     idVerification: "Verified",
     parentCompanyName: "NTUC Fairprice",
   });
+
+  const ProfileItem = ({ icon, label, value, onEdit, styles }) => (
+    <View style={styles.profileItemContainer}>
+      <View style={styles.profileItemDetails}>
+        <View style={styles.profileIconContainer}>
+          <FontAwesome name={icon} size={24} color={isDarkMode ? COLORS.dark.black : COLORS.light.black} />
+        </View>
+        <View style={styles.profileItemTextContainer}>
+          <Text style={styles.profileItemValue}>{value}</Text>
+          <Text style={styles.profileItemLabel}>{label}</Text>
+        </View> 
+      </View>
+      <TouchableOpacity onPress={onEdit} style={styles.editButton}>
+        <FontAwesome name="chevron-right" size={16} color={isDarkMode ? COLORS.dark.grey : COLORS.light.grey} />
+      </TouchableOpacity>
+    </View>
+  );
 
   const [modalVisible, setModalVisible] = useState(false);
   const [editingField, setEditingField] = useState(null);
@@ -156,36 +158,42 @@ const AdminProfile = () => {
           label="Account Name"
           value={user.accountName}
           onEdit={() => handleEdit("accountName")}
+          styles={styles}
         />
         <ProfileItem
           icon="map-marker"
           label="Address"
           value={user.address}
           onEdit={() => handleEdit("address")}
+          styles={styles}
         />
         <ProfileItem
           icon="phone"
           label="Phone Number"
           value={user.phoneNumber}
           onEdit={() => handleEdit("phoneNumber")}
+          styles={styles}
         />
         <ProfileItem
           icon="envelope"
           label="Email Address"
           value={user.emailAddress}
           onEdit={() => handleEdit("emailAddress")}
+          styles={styles}
         />
         <ProfileItem
           icon="id-card"
           label="Identification Verification"
           value={user.idVerification}
           onEdit={() => handleEdit("idVerification")}
+          styles={styles}
         />
         <ProfileItem
           icon="building"
           label="Parent Company Name"
           value={user.parentCompanyName}
           onEdit={() => handleEdit("parentCompanyName")}
+          styles={styles}
         />
       </View>
       <TouchableOpacity onPress={handleSignOut} style={styles.signOutButton}>
@@ -318,7 +326,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   profileName: {
     fontWeight: "bold",
     fontSize: 28,
-    color: COLORS.black,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   accountNumberContainer: {
     flexDirection: "row",
@@ -338,6 +346,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   profileItemsContainer: {
     flex: 1,
     padding: 16,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   profileItemContainer: {
     flexDirection: "row",
@@ -348,6 +357,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     borderRadius: 16,
     marginBottom: 12,
     shadowColor: isDarkMode ? COLORS.dark.black : COLORS.light.black,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -356,6 +366,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   profileItemDetails: {
     flexDirection: "row",
     alignItems: "center",
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   profileIconContainer: {
     justifyContent: "center",
@@ -417,6 +428,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderRadius: 8,
     backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   input: {
     width: "100%",
@@ -426,6 +438,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     borderColor: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
     borderRadius: 8,
     backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   pickerContainer: {
     width: "100%",

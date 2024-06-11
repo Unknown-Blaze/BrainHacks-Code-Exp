@@ -23,7 +23,7 @@ import { useTheme } from "./ThemeProvider";
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-const FilterButton = ({ onPress }) => (
+const FilterButton = ({ onPress, styles }) => (
   <TouchableOpacity style={styles.filterButtonContainer} onPress={onPress}>
     <View style={styles.filterButtonTextContainer}>
       <Text style={styles.filterButtonText}>Filters</Text>
@@ -40,7 +40,7 @@ const InfoItem = ({ children }) => (
   </View>
 );
 
-export const MarketItem = ({ image, name, expiryDate, itemsOnSale }) => (
+export const MarketItem = ({ image, name, expiryDate, itemsOnSale, styles }) => (
   <TouchableOpacity
     style={styles.marketCard}
     onPress={() => handlePromotionPress(name)}
@@ -59,7 +59,7 @@ export const MarketItem = ({ image, name, expiryDate, itemsOnSale }) => (
   </TouchableOpacity>
 );
 
-export const Recipe = ({ rating, location, name, numIng, time, image }) => (
+export const Recipe = ({ rating, location, name, numIng, time, image, styles }) => (
   <TouchableOpacity style = {styles.recipeContainer}>
     <Image source = {{uri: image}} style = {styles.mainImage}>
     </Image>
@@ -134,6 +134,7 @@ const Search = () => {
       location={item.location}
       itemsOnSale={item.itemsOnSale}
       image={item.image}
+      styles={styles}
     />
   );
 
@@ -143,6 +144,7 @@ const Search = () => {
       name={item.name}
       expiryDate={item.expiryDate}
       itemsOnSale={item.itemsOnSale}
+      styles={styles}
     />
   );
 
@@ -154,6 +156,7 @@ const Search = () => {
       numIng = {item.numIng}
       time = {item.time}
       image = {item.image}
+      styles={styles}
     />
   );
 
@@ -205,7 +208,7 @@ const Search = () => {
             keyExtractor={(item) => item.id}
             persistentScrollbar={true}
           />
-          )}
+          )} 
         </View>
       </View>
     </SafeAreaView>
@@ -277,11 +280,13 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   groceryItemTitle: {
     fontSize: width * 0.05,
     fontWeight: "bold",
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   groceryItemFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: height * 0.01,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   promotionsText: {
     fontSize: width * 0.045,
@@ -311,14 +316,15 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   promotionTitle: {
     fontSize: width * 0.04,
     fontWeight: "bold",
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   promotionSubtitle: {
     fontSize: width * 0.035,
-    color: "#555",
+    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
   },
   promotionItems: {
     fontSize: width * 0.03,
-    color: "#999",
+    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
   },
   expiringText: {
     fontSize: width * 0.045,
@@ -366,14 +372,15 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   marketTitle: {
     fontSize: width * 0.04,
     fontWeight: "bold",
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
   },
   marketExpiry: {
     fontSize: width * 0.035,
-    color: "#555",
+    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
   },
   marketSale: {
     fontSize: width * 0.03,
-    color: "#999",
+    color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
   },
   marketCard: {
     flexDirection: "row",

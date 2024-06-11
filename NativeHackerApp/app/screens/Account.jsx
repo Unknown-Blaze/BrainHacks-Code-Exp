@@ -111,7 +111,7 @@ function Account() {
 const getStyles = (isDarkMode) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: isDarkMode ? COLORS.dark.black : COLORS.light.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
   },
   scrollViewContainer: {
     alignItems: "center",
@@ -121,7 +121,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     padding: "5%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.dark_green,
+    backgroundColor: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
   },
   profileContainer: {
     width: "90%",
@@ -131,7 +131,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   profileName: {
     fontSize: 24,
     fontWeight: "bold",
-    color: isDarkMode ? COLORS.dark.green : COLORS.light.dark_green,
+    color: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     marginVertical: 8,
     textAlign: "center",
   },
@@ -157,13 +157,13 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     marginTop: 8,
     fontSize: 20,
     fontWeight: "bold",
-    color: isDarkMode ? COLORS.dark.white : COLORS.light.black,
+    color: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     textAlign: "center",
   },
   settingsTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: isDarkMode ? COLORS.dark.green : COLORS.light.dark_green,
+    color: isDarkMode ? COLORS.dark.dark_green : COLORS.light.dark_green,
     marginTop: 20,
     marginBottom: 12,
     width: "90%",
@@ -172,12 +172,12 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   settingsContainer: {
     width: "90%",
     alignItems: "center",
-    shadowColor: isDarkMode ? COLORS.dark.white : COLORS.light.black,
+    shadowColor: isDarkMode ? COLORS.dark.black : COLORS.light.black,
     shadowOffset: { width: 2, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2.5,
     elevation: 5,
-    backgroundColor: isDarkMode ? COLORS.dark.black : COLORS.light.white,
+    backgroundColor: isDarkMode ? COLORS.dark.white : COLORS.light.white,
     padding: 10,
     borderRadius: 10,
     marginBottom: 20, // add margin to prevent overlap
@@ -194,7 +194,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   },
   settingItemText: {
     fontSize: 20,
-    color: isDarkMode ? COLORS.dark.white : COLORS.light.black,
+    color: isDarkMode ? COLORS.dark.black : COLORS.light.black,
     marginLeft: 10,
     flex: 1,
   },
