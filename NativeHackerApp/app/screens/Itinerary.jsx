@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -21,68 +21,12 @@ import { useNavigation } from "@react-navigation/native";
 import COLORS from "../constants/colors";
 import { generateEmojiForItem } from "../api/emoji";
 import { useTheme } from "./ThemeProvider";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { SupermarketsContext } from "./MapContext";
+import { ALLITEMS } from "./Lists";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
-
-const hardcodedItems = [
-  {
-    name: "White Bread",
-    quantity: 1,
-    daysLeft: "3 days",
-    daysLeftNumber: 3,
-    emoji: "🍞",
-  },
-  {
-    name: "Eggs",
-    quantity: 12,
-    daysLeft: "10 days",
-    daysLeftNumber: 10,
-    emoji: "🥚",
-  },
-  {
-    name: "Almonds",
-    quantity: 1,
-    daysLeft: "14 days",
-    daysLeftNumber: 14,
-    emoji: "🌰",
-  },
-  {
-    name: "Spinach",
-    quantity: 1,
-    daysLeft: "5 days",
-    daysLeftNumber: 5,
-    emoji: "🌿",
-  },
-  {
-    name: "Cabbage",
-    quantity: 2,
-    daysLeft: "5 days",
-    daysLeftNumber: 5,
-    emoji: "🥬",
-  },
-  {
-    name: "Bananas",
-    quantity: 6,
-    daysLeft: "2 days",
-    daysLeftNumber: 2,
-    emoji: "🍌",
-  },
-  {
-    name: "Fresh Orange Juice",
-    quantity: 2,
-    daysLeft: "14 days",
-    daysLeftNumber: 14,
-    emoji: "🧃",
-  },
-  {
-    name: "Milk",
-    quantity: 3,
-    daysLeft: "7 days",
-    daysLeftNumber: 7,
-    emoji: "🥛",
-  },
-];
 
 const hardcodedFilters = [
   { label: "All", value: "all" },
@@ -92,12 +36,12 @@ const hardcodedFilters = [
 
 function Itinerary() {
   const navigation = useNavigation();
-  const [items, setItems] = useState(hardcodedItems);
+  const { inventory, setInventory } = useContext(SupermarketsContext);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [editMode, setEditMode] = useState(false);
   const [markedForDeletion, setMarkedForDeletion] = useState([]);
-  const [editedItems, setEditedItems] = useState([...hardcodedItems]);
+  const [editedItems, setEditedItems] = useState([...ALLITEMS]);
   const [showAddOptions, setShowAddOptions] = useState(false);
   const [showManualAddModal, setShowManualAddModal] = useState(false);
   const [newItemName, setNewItemName] = useState("");
@@ -107,31 +51,64 @@ function Itinerary() {
   const [itemQuantityError, setItemQuantityError] = useState("");
   const [itemDaysLeftError, setItemDaysLeftError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredItems, setFilteredItems] = useState([...items]);
+
   const { isDarkMode } = useTheme();
   const styles = getStyles(isDarkMode);
+  const [filteredItems, setFilteredItems] = useState([...inventory]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     setFilteredItems(getFilteredItems());
-  }, [searchQuery, selectedFilter, items]);
+  }, [searchQuery, selectedFilter, inventory]);
 
   const filterItems = () => {
     if (searchQuery.trim() === "") {
-      return items;
+      return inventory;
     } else {
-      return items.filter((item) =>
+      return inventory.filter((item) =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
   };
+  const Filter = ({
+    label,
+    filters,
+    selectedFilter,
+    setSelectedFilter,
+    isDropdownOpen,
+    setIsDropdownOpen,
+  }) => {
+    return (
+      <View style={styles.filterContainer}>
+        <Text style={styles.filterLabel}>{label}</Text>
+        <TouchableOpacity
+          style={[
+            styles.filterButton,
+            isDropdownOpen && styles.filterButtonOpen,
+          ]}
+          onPress={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
+          <Text style={styles.filterButtonText}>
+            {filters.find((filter) => filter.value === selectedFilter)?.label}
+          </Text>
+          <Ionicons
+            name={isDropdownOpen ? "chevron-up" : "chevron-down"}
+            size={20}
+            color="white"
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   const handleEditPress = () => {
+    console.log("pressed");
     setEditMode(!editMode);
     if (showAddOptions) {
       setShowAddOptions(false);
     }
     setMarkedForDeletion([]); // Reset the marked for deletion list when toggling edit mode
-    setEditedItems([...items]); // Set edited items to current items when entering edit mode
+    setEditedItems([...inventory]); // Set edited items to current items when entering edit mode
   };
 
   const handleSavePress = () => {
@@ -139,7 +116,7 @@ function Itinerary() {
     const newItems = editedItems.filter(
       (item, index) => !markedForDeletion.includes(index)
     );
-    setItems(newItems);
+    setInventory(newItems);
     setEditMode(false);
     setMarkedForDeletion([]); // Clear marked items after saving
     setEditedItems(newItems); // Update edited items to the new saved items
@@ -176,24 +153,48 @@ function Itinerary() {
     setShowManualAddModal(!showManualAddModal);
   };
 
-  const handleDeletePress = (index) => {
-    if (markedForDeletion.includes(index)) {
-      setMarkedForDeletion(markedForDeletion.filter((i) => i !== index));
+  // const handleDeletePress = (index) => {
+  //   if (markedForDeletion.includes(index)) {
+  //     setMarkedForDeletion(markedForDeletion.filter((i) => i !== index));
+  //   } else {
+  //     setMarkedForDeletion([...markedForDeletion, index]);
+  //   }
+  // };
+
+  // const handleIncreaseQuantity = (index) => {
+  //   const newItems = [...editedItems];
+  //   newItems[index].quantity += 1;
+  //   setEditedItems(newItems);
+  // };
+
+  // const handleDecreaseQuantity = (index) => {
+  //   const newItems = [...editedItems];
+  //   if (newItems[index].quantity > 1) {
+  //     newItems[index].quantity -= 1;
+  //     setEditedItems(newItems);
+  //   }
+  // };
+  const handleDeletePress = (id) => {
+    if (markedForDeletion.includes(id)) {
+      setMarkedForDeletion(markedForDeletion.filter((itemId) => itemId !== id));
     } else {
-      setMarkedForDeletion([...markedForDeletion, index]);
+      setMarkedForDeletion([...markedForDeletion, id]);
+    }
+  };
+  const handleIncreaseQuantity = (id) => {
+    const newItems = [...editedItems];
+    const itemIndex = newItems.findIndex((item) => item.id === id);
+    if (itemIndex !== -1) {
+      newItems[itemIndex].quantity += 1;
+      setEditedItems(newItems);
     }
   };
 
-  const handleIncreaseQuantity = (index) => {
+  const handleDecreaseQuantity = (id) => {
     const newItems = [...editedItems];
-    newItems[index].dateBought += 1;
-    setEditedItems(newItems);
-  };
-
-  const handleDecreaseQuantity = (index) => {
-    const newItems = [...editedItems];
-    if (newItems[index].dateBought > 1) {
-      newItems[index].dateBought -= 1;
+    const itemIndex = newItems.findIndex((item) => item.id === id);
+    if (itemIndex !== -1 && newItems[itemIndex].quantity > 1) {
+      newItems[itemIndex].quantity -= 1;
       setEditedItems(newItems);
     }
   };
@@ -220,6 +221,14 @@ function Itinerary() {
       setItemDaysLeftError("");
     }
 
+    const handleSearchChange = (e) => {
+      setSearchTerm(e.target.value);
+    };
+
+    const filteredItems = editedItems.filter((item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     // All fields are filled, proceed with adding the new item
     const newItem = {
       name: newItemName,
@@ -228,7 +237,8 @@ function Itinerary() {
       daysLeftNumber: parseInt(newItemDaysLeft),
       emoji: await generateEmojiForItem(newItemName),
     };
-    setItems([...items, newItem]);
+    
+    setInventory([...inventory, newItem]);
     setShowManualAddModal(false);
     setShowAddOptions(false);
     setNewItemName("");
@@ -237,16 +247,18 @@ function Itinerary() {
   };
 
   const getFilteredItems = () => {
-    let filteredItems = [...items];
+    let filteredItems = [...inventory];
+
+    if (searchQuery.trim() !== "") {
+      filteredItems = filteredItems.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
 
     if (selectedFilter === "expiringSoon") {
-      filteredItems.sort((a, b) => {
-        const aDays = a.daysLeftNumber;
-        const bDays = b.daysLeftNumber;
-        return aDays - bDays;
-      });
+      filteredItems.sort((a, b) => a.daysLeftNumber - b.daysLeftNumber);
     } else if (selectedFilter === "quantityWise") {
-      filteredItems.sort((a, b) => b.dateBought - a.dateBought);
+      filteredItems.sort((a, b) => b.quantity - a.quantity);
     }
 
     return filteredItems;
@@ -272,7 +284,7 @@ function Itinerary() {
       backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
       alignSelf: "center",
       maxWidth: "80%",
-      borderRadius: width/2
+      borderRadius: "50%",
     },
     searchText: {
       fontSize: 18,
@@ -330,13 +342,13 @@ function Itinerary() {
     },
     editButton: {
       justifyContent: "center",
+      position: "absolute",
       paddingHorizontal: "8%",
       paddingVertical: "3%",
       backgroundColor: isDarkMode ? COLORS.dark.green : COLORS.light.green,
       borderRadius: 50, // Set to a fixed number for circular shape
       bottom: "3%",
-      width: 100, // Explicitly set width and height to make it circular
-      height: 100,
+      zIndex: 1,
     },
     editButtonText: {
       fontSize: 20,
@@ -361,25 +373,51 @@ function Itinerary() {
       textAlign: "center",
     },
     //--------Edit------------
-    editButtonsContainer: {
-      width: "50%",
-      flexDirection: "row",
-      position: "absolute",
-      bottom: "90%",
-      zIndex: 1,
-    },
+
     saveButton: {
-      paddingVertical: "5%",
       backgroundColor: isDarkMode ? COLORS.dark.blue : COLORS.light.blue,
-      marginHorizontal: "7%",
-      left: "40%",
-      bottom: "15%",
+      justifyContent: "center",
+      position: "absolute",
+      alignItems: "center",
+      width: 0.06 * height,
+      height: 0.06 * height,
+      borderRadius: 100,
+      left: 0.01 * width,
+      bottom: 0.08 * height,
     },
     cancelButton: {
-      paddingHorizontal: "6%",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "absolute",
+      width: 0.06 * height,
+      height: 0.06 * height,
+      borderRadius: 100,
       backgroundColor: isDarkMode ? COLORS.dark.red : COLORS.light.red,
-      marginHorizontal: "15%",
-      bottom: "-17%",
+      left: 0.17 * width,
+      bottom: 0.01 * height,
+    },
+    addOptionButton: {
+      backgroundColor: "blue",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "absolute",
+      width: 0.06 * height,
+      height: 0.06 * height,
+      borderRadius: 100,
+      //marginBottom: "15%",
+      right: 0.17 * width,
+      bottom: 0.01 * height,
+    },
+    cameraOptionButton: {
+      justifyContent: "center",
+      alignItems: "center",
+      position: "absolute",
+      width: 0.06 * height,
+      height: 0.06 * height,
+      borderRadius: 100,
+      backgroundColor: isDarkMode ? COLORS.dark.red : COLORS.light.red,
+      right: 0.01 * width,
+      bottom: 0.08 * height,
     },
 
     deleteIcon: {
@@ -612,6 +650,68 @@ function Itinerary() {
       marginHorizontal: 10,
       fontSize: 16,
     },
+    editButtonsContainer: {
+      //width: "50%",
+      //flexDirection: "row",
+      position: "absolute",
+      bottom: 5,
+      left: 10,
+      alignItems: "flex-end",
+      borderWidth: 2,
+      zIndex: 1,
+    },
+    controlsContainer: {
+      marginBottom: 0.06 * height,
+
+      width: "100%",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      backgroundColor: "white",
+      zIndex: 10,
+    },
+    smallButton: {
+      backgroundColor: "transparent",
+      justifyContent: "center",
+      paddingHorizontal: 10,
+      borderRadius: 30,
+      marginHorizontal: 10,
+      zIndex: 11,
+    },
+    filterContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: 10,
+      backgroundColor: COLORS.green,
+      borderRadius: 10,
+      marginHorizontal: 20,
+      marginVertical: 10,
+    },
+    filterLabel: {
+      color: "white",
+      fontSize: 18,
+      fontWeight: "bold",
+    },
+    filterButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: COLORS.green,
+      padding: 10,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: "white",
+      transition: "all 0.3s ease",
+    },
+    filterButtonOpen: {
+      backgroundColor: COLORS.darkGreen,
+      borderColor: COLORS.darkGreen,
+    },
+    filterButtonText: {
+      color: "white",
+      fontSize: 16,
+      marginRight: 5,
+    },
   });
 
   return (
@@ -646,96 +746,97 @@ function Itinerary() {
         />
       )}
       <ScrollView style={styles.listContainer}>
-        {filteredItems
-          .filter((item) =>
-            item.name.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-          .map((item, index) => (
-            <View key={index} style={styles.card}>
-              <View style={styles.itemDetails}>
-                <Text style={styles.itemEmoji}>{item.emoji}</Text>
-                <View style={styles.itemInfo}>
-                  <Text
-                    style={[
-                      styles.itemText,
-                      markedForDeletion.includes(index) && styles.dullText,
-                    ]}
-                  >
-                    {item.name}
-                  </Text>
-                  <Text style={styles.quantityText}>
-                    Quantity: {item.dateBought}
-                  </Text>
-                  <Text
-                    style={[
-                      styles.expiryText,
-                      markedForDeletion.includes(index) && styles.dullText,
-                    ]}
-                  >
-                    Expires in: {item.daysLeft}
-                  </Text>
-                </View>
-                {editMode && (
-                  <View style={styles.editOptions}>
-                    <View style={styles.quantityButtons}>
-                      <TouchableOpacity
-                        style={[styles.controlButton]}
-                        onPress={() => handleDecreaseQuantity(index)}
-                      >
-                        <FontAwesome name="minus" size={16} color="red" />
-                      </TouchableOpacity>
-                      <Text style={styles.quantityTextBetween}>
-                        {item.quantity}
-                      </Text>
-                      <TouchableOpacity
-                        style={[styles.controlButton]}
-                        onPress={() => handleIncreaseQuantity(index)}
-                      >
-                        <FontAwesome name="plus" size={16} color="green" />
-                      </TouchableOpacity>
-                    </View>
-                    <TouchableOpacity onPress={() => handleDeletePress(index)}>
-                      <FontAwesome
-                        name="trash"
-                        size={24}
-                        style={[
-                          styles.deleteIcon,
-                          markedForDeletion.includes(index) && styles.dullText,
-                        ]}
-                      />
+        {filteredItems.map((item) => (
+          <View key={item.id} style={styles.card}>
+            <View style={styles.itemDetails}>
+              <Text style={styles.itemEmoji}>{item.emoji}</Text>
+              <View style={styles.itemInfo}>
+                <Text
+                  style={[
+                    styles.itemText,
+                    markedForDeletion.includes(item.id) && styles.dullText,
+                  ]}
+                >
+                  {item.name}
+                </Text>
+                <Text style={styles.quantityText}>
+                  Quantity: {item.quantity}
+                </Text>
+                <Text
+                  style={[
+                    styles.expiryText,
+                    markedForDeletion.includes(item.id) && styles.dullText,
+                  ]}
+                >
+                  Expires in: {item.daysLeft}
+                </Text>
+              </View>
+              {editMode && (
+                <View style={styles.editOptions}>
+                  <View style={styles.quantityButtons}>
+                    <TouchableOpacity
+                      style={[styles.controlButton]}
+                      onPress={() => handleDecreaseQuantity(item.id)}
+                    >
+                      <FontAwesome name="minus" size={16} color="red" />
+                    </TouchableOpacity>
+                    <Text style={styles.quantityTextBetween}>
+                      {item.quantity}
+                    </Text>
+                    <TouchableOpacity
+                      style={[styles.controlButton]}
+                      onPress={() => handleIncreaseQuantity(item.id)}
+                    >
+                      <FontAwesome name="plus" size={16} color="green" />
                     </TouchableOpacity>
                   </View>
-                )}
-              </View>
+                  <TouchableOpacity onPress={() => handleDeletePress(item.id)}>
+                    <FontAwesome
+                      name="trash"
+                      size={24}
+                      style={[
+                        styles.deleteIcon,
+                        markedForDeletion.includes(item.id) && styles.dullText,
+                      ]}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
-          ))}
+          </View>
+        ))}
       </ScrollView>
-
+      <View style={styles.controlsContainer}>
+        <TouchableOpacity
+          onPress={handleEditPress}
+          style={[styles.smallButton]}
+        >
+          <FontAwesome name="edit" size={35} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleAddPress} style={styles.smallButton}>
+          <Ionicons name="add-circle" size={50} color="green" />
+        </TouchableOpacity>
+      </View>
       <SafeAreaView style={styles.footer}>
         {editMode && (
-          <View style={styles.editButtonsContainer}>
+          <View>
             <TouchableOpacity
-              style={[styles.editButton, styles.saveButton]}
+              style={styles.saveButton}
               onPress={handleSavePress}
             >
-              <Text style={styles.editButtonText}>Save</Text>
+              <FontAwesome name="save" size={30} color="white" />
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.editButton, styles.cancelButton]}
+              style={styles.cancelButton}
               onPress={handleCancelPress}
             >
-              <Text style={styles.editButtonText}>Cancel</Text>
+              <FontAwesome name="times" size={30} color="white" />
             </TouchableOpacity>
           </View>
         )}
-        <TouchableOpacity style={styles.editButton} onPress={handleEditPress}>
-          <Text style={styles.editButtonText}>{"Edit"}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
+
         {showAddOptions && (
-          <View style={styles.addOptionsContainer}>
+          <View>
             <TouchableOpacity
               style={styles.cameraOptionButton}
               onPress={handleCameraPress}
@@ -746,7 +847,7 @@ function Itinerary() {
               style={styles.addOptionButton}
               onPress={handleManualAddPress}
             >
-              <FontAwesome name="plus" size={30} color="white" />
+              <FontAwesome name="cart-plus" size={30} color="white" />
             </TouchableOpacity>
           </View>
         )}

@@ -8,12 +8,18 @@ import {
   FlatList,
   Platform,
   StyleSheet,
+  Dimensions
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import COLORS from "../constants/colors";
 import Header from "../general components/header";
 import { PROMOS, ITEMS } from "./Lists";
+
 import { useTheme } from "./ThemeProvider";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 const getFontFamily = () => {
   if (Platform.OS === "ios") {
@@ -54,17 +60,13 @@ const Item = ({ name, daysLeft, used, styles }) => (
   </View>
 );
 
-const Promo = ({ name, location, itemsOnSale, image, styles }) => (
+
+export const Promo = ({ name, location, itemsOnSale, onPress, styles }) => (
   <TouchableOpacity
     style={styles.promotionBox}
-    onPress={() => handlePromotionPress(name)}
+    onPress = {onPress}
   >
-    <Image
-      source={{
-        uri: image,
-      }}
-      style={styles.promotionImage}
-    />
+    <FontAwesome5 name = "store" size = {0.04 * height} style = {{paddingRight: 0.02 * width}} color = {COLORS.brown}/>
     <View style={styles.promotionDetails}>
       <Text style={styles.promotionTitle}>{name}</Text>
       <Text style={styles.promotionSubtitle}>{location}</Text>
@@ -81,10 +83,6 @@ function Home() {
   const handleTrackerPress = () => {
     console.log("Navigating to GroceryTracker");
     navigation.navigate("CameraScreen");
-  };
-
-  const handlePromotionPress = (title) => {
-    console.log("Viewing promotion:", title);
   };
 
   return (
@@ -138,7 +136,8 @@ function Home() {
                 location={item.location}
                 itemsOnSale={item.itemsOnSale}
                 image={item.image}
-                styles={styles} // Pass the styles prop to Promo component
+                styles={styles}
+                onPress={() => navigation.navigate("ListItems")}
               />
             )}
             keyExtractor={(item) => item.id}

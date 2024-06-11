@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useContext, useEffect} from 'react';
 import {
   View,
   Text,
@@ -15,10 +15,16 @@ import {
 import Header from "../general components/header";
 import COLORS from "../constants/colors"
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Promo } from "./Home";
+
 import { PROMOS, MARKETITEMS, RECIPES } from "./Lists";
 import { useTheme } from "./ThemeProvider";
+
+import { MARKETITEMS, RECIPES, ALLITEMS } from "./Lists";
+import { SupermarketsContext } from './MapContext';
+import { useNavigation } from "@react-navigation/native";
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -40,21 +46,17 @@ const InfoItem = ({ children }) => (
   </View>
 );
 
-export const MarketItem = ({ image, name, expiryDate, itemsOnSale, styles }) => (
+export const MarketItem = ({ marketName, location, image, name, expiryDate, itemsOnSale, styles }) => (
   <TouchableOpacity
     style={styles.marketCard}
     onPress={() => handlePromotionPress(name)}
   >
-    <Image
-      source={{
-        uri: image,
-      }}
-      style={styles.marketImage}
-    />
+    <Text style = {styles.marketImage}>{image}</Text>
     <View style={styles.marketContent}>
       <Text style={styles.marketTitle}>{name}</Text>
       <Text style={styles.marketExpiry}>{expiryDate}</Text>
-      <Text style={styles.marketSale}>Items On Sale: {itemsOnSale}</Text>
+      <Text style={styles.marketSale}>Quantity: {itemsOnSale}</Text>
+      <Text style={styles.marketLocation}>{marketName} {location}</Text>
     </View>
   </TouchableOpacity>
 );
@@ -119,6 +121,60 @@ const Search = () => {
 
   const [selectedButton, setSelectedButton] = useState(null);
   const [searchText, setSearchText] = useState('');
+  const [promos, setPromos] = useState([]);
+  const { supermarkets, items, setItems } = useContext(SupermarketsContext);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    generatePromos();
+  }, [supermarkets]);
+
+  const generateItemsArray = (newItems) => {
+    const itemsArray = newItems.reduce((accumulator, currentItem) => {
+      if (currentItem.item1 && typeof currentItem.item1 === 'object') {
+        accumulator.push(currentItem.item1);
+      }
+      if (currentItem.item2 && typeof currentItem.item2 === 'object') {
+        accumulator.push(currentItem.item2);
+      }
+      return accumulator;
+    }, []);
+  
+    return itemsArray;
+  };
+
+  const generatePromos = () => {
+    let id = 1;
+    let marketId = 1;
+    const newPromos = supermarkets.map(s => ({
+      id: id++,
+      name: s.name,
+      location: s.vicinity,
+      itemsOnSale: Math.floor(Math.random() * 2) + 1
+  }));
+
+    setPromos(newPromos);
+
+    const newItems = newPromos.map(item => ({
+      item1: [item.name, item.location, ALLITEMS[Math.floor((Math.random() * ALLITEMS.length))]],
+      item2: (item.itemsOnSale > 1) ? [item.name, item.location, ALLITEMS[Math.floor((Math.random() * ALLITEMS.length))]] : 0
+    }))
+    
+    const appendItems = generateItemsArray(newItems);
+    console.log(appendItems)
+
+    const allItems = appendItems.map(item => ({
+      id: marketId++,
+      marketName: item[0],
+      location: item[1],
+      image: item[2].emoji,
+      name: item[2].name,
+      expiryDate: item[2].daysLeft,
+      itemsOnSale: item[2].quantity
+    }))
+
+    setItems(allItems);
+  };
 
   const handlePress = (button) => {
     setSelectedButton(button);
@@ -135,11 +191,14 @@ const Search = () => {
       itemsOnSale={item.itemsOnSale}
       image={item.image}
       styles={styles}
+      onPress={() => navigation.navigate("ListItems")}
     />
   );
 
   const renderMarket = ({ item }) => (
     <MarketItem
+      marketName={item.marketName}
+      location={item.location}
       image = {item.image}
       name={item.name}
       expiryDate={item.expiryDate}
@@ -186,17 +245,17 @@ const Search = () => {
         <View style = {{flex: 0.1}}>
           <Text style = {styles.resultsText}>Results</Text>
         </View>
-        <View style = {{flex: 0.9}}>
+        <View style = {{flex: 0.9, marginBottom: 0.05 * height}}>
           {selectedButton === 'button1' && (
           <FlatList
-            data={filterData(PROMOS)}
+            data={filterData(promos)}
             renderItem={renderPromo}
             keyExtractor={(item) => item.id}
             persistentScrollbar={true}
           />)}
           {selectedButton === 'button2' && (
           <FlatList
-            data={filterData(MARKETITEMS)}
+            data={filterData(items)}
             renderItem={renderMarket}
             keyExtractor={(item) => item.id}
             persistentScrollbar={true}
@@ -361,8 +420,7 @@ const getStyles = (isDarkMode) => StyleSheet.create({
     left: width * 0.05,
   },
   marketImage: {
-    width: width * 0.15,
-    height: width * 0.15,
+    fontSize: 0.1 * width,
     marginRight: width * 0.02,
     borderRadius: 4,
   },
@@ -381,6 +439,9 @@ const getStyles = (isDarkMode) => StyleSheet.create({
   marketSale: {
     fontSize: width * 0.03,
     color: isDarkMode ? COLORS.dark.grey : COLORS.light.grey,
+  },
+  marketLocation : {
+    fontSize: 0.03 * width
   },
   marketCard: {
     flexDirection: "row",
