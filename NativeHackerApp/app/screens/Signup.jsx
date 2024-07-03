@@ -1,18 +1,59 @@
 import * as React from "react";
-import { Dimensions, View, StyleSheet, Image, Text, TextInput, Pressable, SafeAreaView, Touchable, Button} from "react-native";
+import { useState } from "react";
+import { Dimensions, View, StyleSheet, Image, Text, TextInput, Pressable, SafeAreaView, Touchable, Button, Alert} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Hoshi } from 'react-native-textinput-effects';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from "@react-navigation/native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import COLORS from "../constants/colors"
+import axios from 'axios';
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const scale = width / 200;
 
 const MyComponent = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [checkPassword, setCheckPassword] = useState("");
   const navigation = useNavigation();
+
+  const handleSignUp = async () => {
+    if (password !== checkPassword) {
+      Alert.alert('Error', 'Passwords do not match.');
+      return;
+    }
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/auth/register', {
+        username,
+        email,
+        password
+      });
+      console.log('Registration successful:', response.data);
+      Alert.alert('Success', 'Registration successful');
+      navigation.navigate('HomeStack');
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        let errorMessages = [];
+        
+        // Iterate through the error response to extract validation messages
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            errorMessages.push(`${key}: ${data[key]}`);
+          }
+        }
+  
+        // Display the error messages
+        Alert.alert('Error', errorMessages.join('\n'));
+      } else {
+        Alert.alert('Error', 'An error occurred during registration.');
+      }
+    }
+  };
+
   return (
     <SafeAreaView style ={{flex: 1}}>
       <View style = {{
@@ -35,12 +76,14 @@ const MyComponent = () => {
       <View style = {{flex: 0.5, marginHorizontal: 0.05 * width}}>
         <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
         <Hoshi
-          label={'Name'}
+          label={'Username'}
           borderColor={COLORS.green}
           inputPadding={0}
           backgroundColor="transparent"
           style={{ width: 0.85 * width}}
           labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
+          value = {username}
+          onChangeText = {setUsername}
         />
         </View>
         <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
@@ -51,6 +94,8 @@ const MyComponent = () => {
             backgroundColor="transparent"
             style={{ width: 0.85 * width }}
             labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
+            value = {email}
+            onChangeText = {setEmail}
           />
         </View>
         <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
@@ -61,6 +106,8 @@ const MyComponent = () => {
             backgroundColor="transparent"
             style={{ width: 0.85 * width }}
             labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
+            value = {password}
+            onChangeText = {setPassword}
           />
         </View>
         <View style = {{flex: 0.25, justifyContent: "center", alignItems: "center"}}>
@@ -72,7 +119,11 @@ const MyComponent = () => {
             style={{ width: 0.85 * width }}
             labelStyle={{ marginTop: -0.015 * height, marginHorizontal: 0.02 * width, fontSize: 8 * scale }}
             secureTextEntry = "true"
+            value = {checkPassword}
+            onChangeText = {setCheckPassword}
           />
+          {(checkPassword != password) ?
+          <Text style = {{paddingTop: 0.01 * height}}>Passwords do not match.</Text> : null}
         </View>
       </View>
       <View style = {{flex: 0.05, flexDirection: "row", justifyContent: "center", alignItems: "center", paddingHorizontal: 0.1 * width}}>
@@ -88,7 +139,7 @@ const MyComponent = () => {
           justifyContent: "center",
           alignItems: "center",
           marginVertical: 0.01 * height
-        }} onPress={() => navigation.navigate('HomeStack')}>
+        }} onPress={() => handleSignUp()}>
           <Text style = {{
             fontWeight: 500,
             color: "white"
