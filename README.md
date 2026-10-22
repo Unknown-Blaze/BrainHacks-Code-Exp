@@ -1,3 +1,13 @@
+# GroceryGrabber
+
+React Native (Expo) app that shows expiring products at nearby supermarkets and suggests recipes from what you already have, with GPT-4 receipt scanning and a Django backend; Finalist, DSTA BrainHack (CODE_EXP).
+
+[![React Native](https://img.shields.io/badge/React%20Native-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
+[![Expo](https://img.shields.io/badge/Expo-000020?style=flat-square&logo=expo&logoColor=white)](https://expo.dev/)
+[![Django](https://img.shields.io/badge/Django-092E20?style=flat-square&logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?style=flat-square&logo=openai&logoColor=white)](https://platform.openai.com/)
+[![Finalist](https://img.shields.io/badge/Finalist%20%C2%B7%20DSTA%20BrainHack-CODE__EXP-FFB000?style=flat-square)](#)
+
 Project Description
 -------------------
 
