@@ -1,0 +1,24 @@
+# Python virtualenvs. The Django project lives inside Backend/venv/, so only the
+# interpreter parts of that folder are ignored, not the folder itself.
+Backend/venv/bin/
+Backend/venv/lib/
+Backend/venv/lib64/
+Backend/venv/include/
+Backend/venv/Scripts/
+Backend/venv/Lib/
+Backend/venv/Include/
+Backend/venv/pyvenv.cfg
+.venv/
+env/
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Local databases and secrets
+*.sqlite3
+.env
+
+# JavaScript / Expo
+node_modules/
+.expo/
